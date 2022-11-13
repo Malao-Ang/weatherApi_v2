@@ -1,11 +1,13 @@
 <script setup lang="ts">
 const api_key = '5e393f97f096de59a3a2b8a91749363a';
-const search = ref("");
-const input = ref("");
-if(! search.value){
-            search.value = 'london'
 
-        }
+const cokkie = useCookie("city");
+if(! cokkie.value){
+    cokkie.value = "London"
+ }
+const search = ref(cokkie.value);
+const input = ref("");
+
 const { data: city, error, refresh } = useAsyncData("city", async () => {
     let response;
     try{
@@ -16,6 +18,8 @@ return response
 
     }catch(error){
         console.log(error);
+    cokkie.value = search.value;
+
 
     }
     return response;
@@ -27,6 +31,7 @@ return response
 
 const hendleSearch = () =>{
     search.value = input.value.trim().split(" ").join("+");
+    cokkie.value = search.value;
     input.value = "";
     console.log('clickes')
 }
